@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Crimson Pro", serif;
+}
+
+.compnent1{
+  background-color: azure;
+}
+.compnent2{
+  background-color: rgb(150, 150, 150);
+}
+.compnent3{
+  background-color: rgb(100, 100, 100);
+}
+.compnent4{
+  background-color: rgb(28, 28, 28);
+}
