@@ -15,8 +15,7 @@ const Register = () => {
     defaultValues: {
       fullName: "",
       email: "",
-      password: "",
-      username: ""
+      password: ""
     }
   });
 
@@ -34,27 +33,6 @@ const Register = () => {
           <h2 className="text-2xl font-bold text-white text-center mb-6">Register</h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
-                Username
-              </label>
-              <input
-                type="text"
-                className={`w-full px-3 py-2 rounded-md bg-gray-700 text-white border 
-                  ${errors.username ? 'border-red-500' : 'border-gray-600'} 
-                  focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                {...register("username", {
-                  required: "Username is required",
-                  minLength: {
-                    value: 3,
-                    message: "Username must be at least 3 characters"
-                  }
-                })}
-              />
-              {errors.username && (
-                <p className="mt-1 text-sm text-red-500">{errors.username.message}</p>
-              )}
-            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">

@@ -55,9 +55,8 @@ const Dashboard = () => {
       try {
         setIsLoading(true);
         const response = await getAllUsers();
-        if (response?.success) {
-          setUsers(response.data);
-          console.log(response.data);
+        if (response) {
+          setUsers(response);
         }
       } finally {
         setIsLoading(false);

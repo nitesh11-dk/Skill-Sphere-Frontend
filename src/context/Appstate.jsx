@@ -13,9 +13,11 @@ const Appstate = (props) => {
   // Check for token on mount and reload to persist login state
   useEffect(() => {
     const savedToken = tokenManager.getToken();
+    const user = localStorage.getItem("user");
     if (savedToken) {
       setToken(savedToken);
       setIsLoggedIn(true);
+      setUser(user);
     }
   }, [reload1]);
 
@@ -25,6 +27,8 @@ const Appstate = (props) => {
     setIsLoggedIn(false);
     setReload1(!reload1);
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
     tokenManager.removeToken();
     toast.success("You have been logged out successfully."); // Use navigate instead of history
   };
@@ -35,12 +39,16 @@ const Appstate = (props) => {
       endpoint: '/user/login',
       data: { email, password },
       successMessage: 'Login successful'
-    });
+    }
+  
+  );
 
     if (response.success) {
       const { token } = response.data;
       setToken(token);
       setIsLoggedIn(true);
+      setUser(response.data.user);
+      localStorage.setItem("user",JSON.stringify(response.data.user));
       setReload1(!reload1);
       tokenManager.setToken(token);
       return true;
@@ -97,12 +105,23 @@ const Appstate = (props) => {
 
   const getAllUsers = async () => {
     const response = await apiCall({
-      endpoint: '/user/',
-      successMessage: null
+      endpoint: "/user/",
+      successMessage: null,
     });
-    return response.data;
+  
+    if (response.success) {
+      const storedUserData = user; 
+      const loggedInUser = storedUserData ? JSON.parse(storedUserData) : null;
+      const users = response.data.data.filter(
+        (u) => u.email != loggedInUser?.email 
+      );
+      return users; 
+    }
+    return [];
   };
+  
 
+  
   const getUserById = async (id) => {
     const response = await apiCall({
       endpoint: `/user/${id}`,
