@@ -166,7 +166,7 @@ const MonthView = ({ onDateClick, onTaskClick }) => {
                       onMouseLeave={(e) => handleTaskHover(e, task, false)}
                     >
                       <div className="truncate">
-                        {task.time ? formatTime(task.time) : "No time"} {task.title}
+                        {task.startTime ? formatTime(task.startTime) : "No time"} {task.title}
                       </div>
                     </div>
                   ))}
@@ -195,23 +195,9 @@ const MonthView = ({ onDateClick, onTaskClick }) => {
               <>
                 <div className="font-medium mb-1">{task.title}</div>
                 <div className="text-gray-300 text-xs mb-2">{task.description}</div>
-                <div className="text-gray-300 text-xs">{task.time ? formatTime(task.time) : "No time"}</div>
+                <div className="text-gray-300 text-xs">{task.startTime ? formatTime(task.startTime) : "No time"}</div>
                 <div className="flex justify-end space-x-2 mt-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onTaskClick(task, e);
-                    }}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => deleteTask(task.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
-                  >
-                    Delete
-                  </button>
+
                 </div>
               </>
             ) : null;

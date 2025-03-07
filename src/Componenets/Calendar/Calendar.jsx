@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TaskProvider } from '../../context/TaskContext';
 import MonthView from './MonthView';
-import WeekView from './WeekView';
 import TaskForm from './TaskForm';
 
 const Calendar = () => {
@@ -50,24 +49,13 @@ const Calendar = () => {
               >
                 Month
               </button>
-              <button
-                onClick={() => setView('week')}
-                className={`px-4 py-2 rounded ${
-                  view === 'week'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
-              >
-                Week
-              </button>
+  
             </div>
           </div>
 
-          {view === 'month' ? (
-            <MonthView onDateClick={handleDateClick} onTaskClick={handleTaskClick} />
-          ) : (
-            <WeekView onSlotClick={handleDateClick} onTaskClick={handleTaskClick} />
-          )}
+          {view === 'month' 
+            && <MonthView onDateClick={handleDateClick} onTaskClick={handleTaskClick} />
+          }
 
           {showTaskForm && (
             <TaskForm
