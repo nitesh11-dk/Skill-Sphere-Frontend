@@ -5,6 +5,50 @@ import Booking from "./Booking";
 import SkillsTemplate from '../SkillsTemplate';
 import ReviewForm from './ReviewForm';
 
+const SkillsCard = ({ skills, onEditClick, isEditing, onSkillsUpdate }) => {
+
+  return (
+    <div className="relative bg-gray-700 p-4 rounded-md">
+      {isEditing && (
+        <div className="absolute -top-4 right-0">
+        <SkillsTemplate 
+        initialSkills={skills}
+        isEditMode={true}
+        onSuccess={onSkillsUpdate}
+        onCancel={() => onEditClick(false)}
+      />
+      </div>
+      )
+}
+
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-white text-xl font-bold">Skills</h3>
+        <button
+          onClick={() => onEditClick(true)}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 
+            rounded-md text-sm transition-colors duration-200"
+        >
+          Edit Skills
+        </button>
+      </div>
+
+      {skills.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {skills.map((skill) => (
+            <span
+              key={skill._id}
+              className="bg-zinc-600 px-3 py-1 rounded-md text-yellow-400"
+            >
+              {skill.title}
+            </span>
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-400">No skills available.</p>
+      )}
+    </div>
+  );
+};
 
 const UserDetails = () => {
   const { id } = useParams();
@@ -12,8 +56,8 @@ const UserDetails = () => {
   const [user, setUser] = useState(null);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [isEditingSkills, setIsEditingSkills] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
   const fetchUser = async () => {
     try {
       setIsLoading(true);
@@ -25,7 +69,6 @@ const UserDetails = () => {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
     fetchUser();
   }, [id]);
@@ -43,7 +86,10 @@ const UserDetails = () => {
     );
   };
 
-
+  const handleSkillsUpdate = async () => {
+    setIsEditingSkills(false);
+    await fetchUser();
+  };
 
   if (isLoading) {
     return (
@@ -91,26 +137,12 @@ const UserDetails = () => {
 
         {/* Skills and Rating Card */}
         <div className="bg-gray-700 p-4 rounded-md">
-        <div className="relative bg-gray-700 p-4 rounded-md">
-<div className="flex justify-between items-center mb-4">
-  <h3 className="text-white text-xl font-bold">Skills</h3>
-</div>
-
-{user.skills.length > 0 ? (
-  <div className="flex flex-wrap gap-2">
-    {user.skills.map((skill) => (
-      <span
-        key={skill._id}
-        className="bg-zinc-600 px-3 py-1 rounded-md text-yellow-400"
-      >
-        {skill.title}
-      </span>
-    ))}
-  </div>
-) : (
-  <p className="text-gray-400">No skills available.</p>
-)}
-</div>
+          <SkillsCard
+            skills={user.skills}
+            onEditClick={setIsEditingSkills}
+            isEditing={isEditingSkills}
+            onSkillsUpdate={handleSkillsUpdate}
+          />
           <h3 className="text-white text-xl font-bold mt-6 mb-2">Overall Rating</h3>
           <div className="text-yellow-400 text-xl">
             {renderRating(averageRating)}
