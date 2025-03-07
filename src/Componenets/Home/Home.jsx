@@ -68,7 +68,7 @@ const Home = () => {
         <div className="flex-1">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-blue-400">
-              Skill-Sync
+              Skill-Sphere
             </h2>
             <button
               onClick={handleLogout}
@@ -88,7 +88,7 @@ const Home = () => {
         </div>
 
         <footer className="text-gray-400 text-sm">
-          <p>&copy; {new Date().getFullYear()} Skill-Sync Avinya</p>
+          <p>&copy; {new Date().getFullYear()} Skill-Sphere </p>
         </footer>
       </nav>
 
