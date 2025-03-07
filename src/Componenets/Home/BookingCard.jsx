@@ -41,6 +41,7 @@ const BookingCard = ({ booking, onStatusChange = null, canChangeStatus = false }
     setShowBarterSelect(false);
   };
 
+
   return (
     <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden hover:border-gray-600 transition-colors duration-200">
       {showTaskForm && <TaskForm booking={booking} onClose={() => setShowTaskForm(false)} />}
@@ -137,6 +138,26 @@ const BookingCard = ({ booking, onStatusChange = null, canChangeStatus = false }
               </div>
             </div>
           )}
+
+{booking.taskSchedule && booking.taskSchedule.date && booking.taskSchedule.startTime && (
+  <div className="flex items-center text-gray-300">
+    <FaGraduationCap className="w-5 h-5 mr-2" />
+    <div>
+      <p className="text-sm text-gray-400">Scheduled</p>
+      <p className="text-white">
+        {new Date(booking.taskSchedule.date).toLocaleDateString("en-GB")} {/* DD/MM/YYYY */}
+      </p>
+      <p className="text-white">
+  {new Date(`1970-01-01T${booking.taskSchedule.startTime}`).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  })}
+</p>
+
+    </div>
+  </div>
+)}
 
           {/* Schedule Lecture Button (Only for accepted bookings) */}
           {booking.status === "accepted" && canChangeStatus && !booking.taskSchedule &&  (
