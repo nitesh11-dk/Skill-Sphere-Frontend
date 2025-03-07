@@ -68,6 +68,7 @@ const OfferingBookings = () => {
             key={booking._id}
             booking={booking}
             onStatusChange={handleStatusChange}
+            canChangeStatus={true}
           />
         ))}
       </div>

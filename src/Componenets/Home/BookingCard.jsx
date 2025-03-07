@@ -5,18 +5,24 @@ import TaskForm from './TaskForm';
 const StatusBadge = ({ status }) => {
   const colors = {
     pending: "bg-yellow-500",
-    accept: "bg-green-500",
-    reject: "bg-red-500"
+    accepted: "bg-green-500",
+    reject: "bg-red-500",
+    scheduled: "bg-blue-500", // Blue indicates that it's scheduled
+    completed: "bg-purple-500", // Purple gives a sense of completion
   };
 
+  const badgeColor = colors[status] || "bg-gray-500"; // Fallback to gray if status is unknown
+
   return (
-    <span className={`${colors[status]} text-white px-3 py-1 rounded-full text-sm font-medium`}>
+    <span className={`${badgeColor} text-white px-3 py-1 rounded-full text-sm font-medium`}>
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
   );
 };
 
-const BookingCard = ({ booking, onStatusChange }) => {
+
+
+const BookingCard = ({ booking, onStatusChange = null, canChangeStatus = false }) => {
   const [showBarterSelect, setShowBarterSelect] = useState(false);
   const [selectedBarterSkill, setSelectedBarterSkill] = useState("");
   const [showTaskForm, setShowTaskForm] = useState(false);
@@ -37,23 +43,16 @@ const BookingCard = ({ booking, onStatusChange }) => {
 
   return (
     <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden hover:border-gray-600 transition-colors duration-200">
-      {showTaskForm && (
-        <TaskForm
-          booking={booking}
-          onClose={() => setShowTaskForm(false)}
-        />
-      )}
-      
+      {showTaskForm && <TaskForm booking={booking} onClose={() => setShowTaskForm(false)} />}
+
       <div className="p-5 space-y-4">
         <div className="flex justify-between items-start">
-          <h3 className="text-lg font-semibold text-white capitalize">
-            {booking.type} Session
-          </h3>
+          <h3 className="text-lg font-semibold text-white capitalize">{booking.type} Session</h3>
           <StatusBadge status={booking.status} />
         </div>
 
-
-        {booking.status === "pending" && !showBarterSelect && (
+        {/* Status Change Section (Only if canChangeStatus is true) */}
+        {canChangeStatus && booking.status === "pending" && !showBarterSelect && (
           <div className="flex items-center space-x-2">
             <select
               value={booking.status}
@@ -68,8 +67,8 @@ const BookingCard = ({ booking, onStatusChange }) => {
           </div>
         )}
 
-        {/* Barter Skill Selection */}
-        {showBarterSelect && (
+        {/* Barter Skill Selection (Only if canChangeStatus is true) */}
+        {canChangeStatus && showBarterSelect && (
           <div className="space-y-3 bg-gray-700 p-4 rounded-md">
             <label className="block text-gray-300">Select Barter Skill:</label>
             <select
@@ -129,7 +128,6 @@ const BookingCard = ({ booking, onStatusChange }) => {
             </div>
           </div>
 
-
           {booking.barterSkill && (
             <div className="flex items-center text-gray-300">
               <FaExchangeAlt className="w-5 h-5 mr-2" />
@@ -139,25 +137,24 @@ const BookingCard = ({ booking, onStatusChange }) => {
               </div>
             </div>
           )}
-          
-        {booking.status == "accepted" && (
-          <div className="mt-4 pt-4 border-t border-gray-700">
-            <button
-              onClick={() => setShowTaskForm(true)}
-              className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 
-                transition-colors duration-200 flex items-center justify-center space-x-2"
-            >
-              <FaClock className="w-4 h-4" />
-              <span>Schedule Lecture</span>
-            </button>
-          </div>
-        )}
-  
-         
+
+          {/* Schedule Lecture Button (Only for accepted bookings) */}
+          {booking.status === "accepted" && canChangeStatus && !booking.taskSchedule &&  (
+            <div className="mt-4 pt-4 border-t border-gray-700">
+              <button
+                onClick={() => setShowTaskForm(true)}
+                className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 
+                  transition-colors duration-200 flex items-center justify-center space-x-2"
+              >
+                <FaClock className="w-4 h-4" />
+                <span>Schedule Lecture</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default BookingCard; 
+export default BookingCard;
